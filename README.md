@@ -16,4 +16,4 @@ A small, simple, and fast DOM creation utility
 
 # Improvements over the original
 
-- None so far
+- Proxy as default api
