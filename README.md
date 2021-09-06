@@ -21,6 +21,7 @@ A small, simple, and fast DOM creation utility
 - Proxy as default api
 - Custom tagTransform
 - Prepopulated attrMap with eventListener and style
+- Middleware functions
 
 # Transform Tag
 
@@ -55,4 +56,20 @@ crel.div({
     height: "50vh",
   },
 });
+```
+
+# Middleware function
+
+```javascript
+crel.div(
+  crel.h1(),
+  crel.div((element) => {
+    fetch("/api/username")
+      .then((response) => response.text())
+      .then((data) => {
+        element.textContent = data;
+      });
+  }),
+  crel.p()
+);
 ```

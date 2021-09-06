@@ -30,6 +30,8 @@ This might make it harder to read at times, but the code's intention should be t
         } else if (isType(child, "string")) {
           child = doc.createTextNode(child);
           element.appendChild(child);
+        } else if (isType(child, func)) {
+          child(element);
         }
       }
     },
