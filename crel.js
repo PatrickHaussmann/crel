@@ -21,14 +21,14 @@ This might make it harder to read at times, but the code's intention should be t
     isType = (object, type) => typeof object === type,
     // Recursively appends children to given element. As a text node if not already an element
     appendChild = (element, child) => {
-      if (child !== null) {
+      if (child) {
         if (Array.isArray(child)) {
           // Support (deeply) nested child elements
           child.map((subChild) => appendChild(element, subChild));
-        } else {
-          if (!crel[isNodeString](child)) {
-            child = doc.createTextNode(child);
-          }
+        } else if (crel[isNodeString](child)) {
+          element.appendChild(child);
+        } else if (isType(child, "string")) {
+          child = doc.createTextNode(child);
           element.appendChild(child);
         }
       }
@@ -36,14 +36,17 @@ This might make it harder to read at times, but the code's intention should be t
     // Define our function as a proxy interface
     crel = new Proxy(
       (element, ...children) => {
+        // If first argument is an element, use it as is, otherwise treat it as a tagname
+        if (!crel.isElement(element)) {
+          if (!isType(element, "string") || element == "") {
+            return; // Do nothing on invalid input
+          }
+          element = doc.createElement(element);
+        }
         // Define all used variables / shortcuts here, to make things smaller once compiled
         let settings = children[0],
           key,
           attribute;
-        // If first argument is an element, use it as is, otherwise treat it as a tagname
-        element = crel.isElement(element)
-          ? element
-          : doc.createElement(element);
         // Check if second argument is a settings object
         if (
           isType(settings, "object") &&
