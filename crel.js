@@ -78,7 +78,12 @@ This might make it harder to read at times, but the code's intention should be t
     crel.isElement = object => object instanceof Element;
     crel[isNodeString] = node => node instanceof Node;
     // Bound functions are "cached" here for legacy support and to keep Crels internal structure clean
-    crel[proxyString] = new Proxy((...args)=>{crel(...args)}, { get: (target, key) => target[key] || crel[key] });
+    crel[proxyString] = new Proxy((...args)=>{crel(...args)}, { 
+        get: (target, key) => {
+            if (key == proxyString) return;
+            return target[key] || crel[key];
+        }
+    });
     
     // Export crel
     exporter(crel, func);
