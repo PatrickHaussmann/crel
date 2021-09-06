@@ -71,16 +71,15 @@ This might make it harder to read at times, but the code's intention should be t
     crel.isElement = object => object instanceof Element;
     crel[isNodeString] = node => node instanceof Node;
     // Expose proxy interface
-    if (typeof Proxy != "undefined") {
-        crel.proxy = new Proxy(crel, {
-            get: (target, key) => {
-                !(key in crel) && (crel[key] = crel.bind(null, key));
-                return crel[key];
-            }
-        });
-    }
-    // Export crel
-    exporter(crel, func);
+    crel.proxy = new Proxy(crel, {
+        get: (target, key) => {
+            !(key in crel) && (crel[key] = crel.bind(null, key));
+            return crel[key];
+        }
+    });
+    
+    // Export Proxy
+    exporter(crel.proxy, func);
 })((product, func) => {
     if (typeof exports === 'object') {
         // Export for Browserify / CommonJS format
