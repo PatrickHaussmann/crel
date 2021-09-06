@@ -50,11 +50,7 @@ This might make it harder to read at times, but the code's intention should be t
           key,
           attribute;
         // Check if second argument is a settings object
-        if (
-          isType(settings, "object") &&
-          !crel[isNodeString](settings) &&
-          !Array.isArray(settings)
-        ) {
+        if (isType(settings, "object")) {
           // Don't treat settings as a child
           children.shift();
           // Go through settings / attributes object, if it exists
