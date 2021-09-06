@@ -13,6 +13,7 @@ This might make it harder to read at times, but the code's intention should be t
     // These strings are used multiple times, so this makes things smaller once compiled
     const func = 'function',
         isNodeString = 'isNode',
+        proxyString = 'proxy',
         doc = document,
         // Helper functions used throughout the script
         isType = (object, type) => typeof object === type,
@@ -28,9 +29,9 @@ This might make it harder to read at times, but the code's intention should be t
                     element.appendChild(child);
                 }
             }
-        };
-    //
-    function crel (element, ...children) {
+        },
+    // Define our function as a proxy interface
+    crel = new Proxy((element, ...children) => {
         // Define all used variables / shortcuts here, to make things smaller once compiled
         let settings = children[0],
             key,
@@ -61,22 +62,26 @@ This might make it harder to read at times, but the code's intention should be t
         // Append remaining children to element and return it
         appendChild(element, children);
         return element;
-    }
+    }, {// Binds specific tagnames to crel function calls with that tag as the first argument
+        get: (target, key) => {
+            if (key in target) {
+                return target[key];
+            } else {
+                target[proxyString][key] = target.bind(null, key);
+            }
+            return target[proxyString][key];
+        }
+    });
 
     // Used for mapping attribute keys to supported versions in bad browsers, or to custom functionality
     crel.attrMap = {};
     crel.isElement = object => object instanceof Element;
     crel[isNodeString] = node => node instanceof Node;
-    // Expose proxy interface
-    crel.proxy = new Proxy(crel, {
-        get: (target, key) => {
-            !(key in crel) && (crel[key] = crel.bind(null, key));
-            return crel[key];
-        }
-    });
+    // Bound functions are "cached" here for legacy support and to keep Crels internal structure clean
+    crel[proxyString] = new Proxy((...args)=>{crel(...args)}, { get: (target, key) => target[key] || crel[key] });
     
-    // Export Proxy
-    exporter(crel.proxy, func);
+    // Export crel
+    exporter(crel, func);
 })((product, func) => {
     if (typeof exports === 'object') {
         // Export for Browserify / CommonJS format
