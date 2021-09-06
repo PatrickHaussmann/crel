@@ -16,6 +16,7 @@ This might make it harder to read at times, but the code's intention should be t
         proxyString = 'proxy',
         tagTransformString = 'tagTransform',
         doc = document,
+        hasOwnProperty = Object.hasOwnProperty.call,
         // Helper functions used throughout the script
         isType = (object, type) => typeof object === type,
         // Recursively appends children to given element. As a text node if not already an element
@@ -77,7 +78,23 @@ This might make it harder to read at times, but the code's intention should be t
     });
 
     // Used for mapping attribute keys to supported versions in bad browsers, or to custom functionality
-    crel.attrMap = {};
+    crel.attrMap = {
+        "on": (element, value) => {
+            for (let eventName in value) {
+                if (hasOwnProperty(value, eventName)) {
+                    element.addEventListener(eventName, value[eventName]);
+                }
+            }
+        },
+        "style": (element, value) => {
+            for (let styleName in value) {
+                if (hasOwnProperty(value, styleName)) {
+                    element.style[styleName] = value[styleName];
+                }
+            }
+        }
+      };
+
     crel.isElement = object => object instanceof Element;
     crel[isNodeString] = node => node instanceof Node;
     // Bound functions are "cached" here for legacy support and to keep Crels internal structure clean

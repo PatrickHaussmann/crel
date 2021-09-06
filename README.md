@@ -20,6 +20,7 @@ A small, simple, and fast DOM creation utility
 
 - Proxy as default api
 - Custom tagTransform
+- Prepopulated attrMap with eventListener and style
 
 # Transform Tag
 
@@ -30,4 +31,28 @@ If you want to transform tags to for example get dashes in them, you can define 
 crel.tagTransform = (key) => key.replace(/([0-9a-z])([A-Z])/g, "$1-$2");
 let element = crel.myTag("Crello World!");
 console.log(element.tagName); // my-tag
+```
+
+# Attach EventListener
+
+```javascript
+// Attaches an onClick event to the img element
+crel.img({
+  on: {
+    click: () => {
+      console.log("Clicked");
+    },
+  },
+});
+```
+
+# Set CSS Style
+
+```javascript
+crel.div({
+  style: {
+    display: "flex",
+    height: "50vh",
+  },
+});
 ```
