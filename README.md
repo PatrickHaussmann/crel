@@ -2,6 +2,8 @@
 
 The original project is [KoryNunn/crel](https://github.com/KoryNunn/crel)
 
+Scripts written with the original should be compatible with this version!
+
 ![crel](https://raw.githubusercontent.com/KoryNunn/crel/master/logo.png)
 
 # What
