@@ -30,10 +30,9 @@ This might make it harder to read at times, but the code's intention should be t
             }
         };
     //
-    function crel (element, settings) {
+    function crel (element, ...children) {
         // Define all used variables / shortcuts here, to make things smaller once compiled
-        let args = arguments, // Note: assigned to a variable to assist compilers.
-            index = 1,
+        let settings = children[0],
             key,
             attribute;
         // If first argument is an element, use it as is, otherwise treat it as a tagname
@@ -41,7 +40,7 @@ This might make it harder to read at times, but the code's intention should be t
         // Check if second argument is a settings object
         if (isType(settings, 'object') && !crel[isNodeString](settings) && !Array.isArray(settings)) {
             // Don't treat settings as a child
-            index++;
+            children.shift();
             // Go through settings / attributes object, if it exists
             for (key in settings) {
                 // Store the attribute into a variable, before we potentially modify the key
@@ -59,11 +58,8 @@ This might make it harder to read at times, but the code's intention should be t
                 }
             }
         }
-        // Loop through all arguments, if any, and append them to our element if they're not `null`
-        for (; index < args.length; index++) {
-            appendChild(element, args[index]);
-        }
-
+        // Append remaining children to element and return it
+        appendChild(element, children);
         return element;
     }
 
