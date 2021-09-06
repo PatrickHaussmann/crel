@@ -10,27 +10,20 @@ This might make it harder to read at times, but the code's intention should be t
 // IIFE our function
 ((exporter) => {
   // Define our function and its properties
-  // These strings are used multiple times, so this makes things smaller once compiled
-  const func = "function",
-    isNodeString = "isNode",
-    proxyString = "proxy",
-    tagTransformString = "tagTransform",
-    doc = document,
-    hasOwnProperty = Object.hasOwnProperty.call,
-    // Helper functions used throughout the script
-    isType = (object, type) => typeof object === type,
+  // Helper functions used throughout the script
+  const isType = (object, type) => typeof object === type,
     // Recursively appends children to given element. As a text node if not already an element
     appendChild = (element, child) => {
       if (child) {
         if (Array.isArray(child)) {
           // Support (deeply) nested child elements
           child.map((subChild) => appendChild(element, subChild));
-        } else if (crel[isNodeString](child)) {
+        } else if (crel.isNode(child)) {
           element.appendChild(child);
         } else if (isType(child, "string")) {
-          child = doc.createTextNode(child);
+          child = document.createTextNode(child);
           element.appendChild(child);
-        } else if (isType(child, func)) {
+        } else if (isType(child, "function")) {
           child(element);
         }
       }
@@ -43,7 +36,7 @@ This might make it harder to read at times, but the code's intention should be t
           if (!isType(element, "string") || element == "") {
             return; // Do nothing on invalid input
           }
-          element = doc.createElement(element);
+          element = document.createElement(element);
         }
         // Define all used variables / shortcuts here, to make things smaller once compiled
         let settings = children[0],
@@ -60,9 +53,9 @@ This might make it harder to read at times, but the code's intention should be t
             // Get mapped key / function, if one exists
             key = crel.attrMap[key] || key;
             // Note: We want to prioritise mapping over properties
-            if (isType(key, func)) {
+            if (isType(key, "function")) {
               key(element, attribute);
-            } else if (isType(attribute, func)) {
+            } else if (isType(attribute, "function")) {
               // ex. onClick property
               element[key] = attribute;
             } else {
@@ -81,11 +74,11 @@ This might make it harder to read at times, but the code's intention should be t
           if (key in target) {
             return target[key];
           }
-          key = target[tagTransformString](key);
-          if (!(key in target[proxyString])) {
-            target[proxyString][key] = target.bind(null, key);
+          key = target.tagTransform(key);
+          if (!(key in target.proxy)) {
+            target.proxy[key] = target.bind(null, key);
           }
-          return target[proxyString][key];
+          return target.proxy[key];
         },
       }
     );
@@ -94,14 +87,14 @@ This might make it harder to read at times, but the code's intention should be t
   crel.attrMap = {
     on: (element, value) => {
       for (let eventName in value) {
-        if (hasOwnProperty(value, eventName)) {
+        if (Object.hasOwnProperty.call(value, eventName)) {
           element.addEventListener(eventName, value[eventName]);
         }
       }
     },
     style: (element, value) => {
       for (let styleName in value) {
-        if (hasOwnProperty(value, styleName)) {
+        if (Object.hasOwnProperty.call(value, styleName)) {
           element.style[styleName] = value[styleName];
         }
       }
@@ -109,29 +102,29 @@ This might make it harder to read at times, but the code's intention should be t
   };
 
   crel.isElement = (object) => object instanceof Element;
-  crel[isNodeString] = (node) => node instanceof Node;
+  crel.isNode = (node) => node instanceof Node;
   // Bound functions are "cached" here for legacy support and to keep Crels internal structure clean
-  crel[proxyString] = new Proxy(
+  crel.proxy = new Proxy(
     (...args) => {
       crel(...args);
     },
     {
       get: (target, key) => {
-        if (key == proxyString) return;
+        if (key == "proxy") return;
         return target[key] || crel[key];
       },
     }
   );
   // Transforms tags on call, to for example allow dashes in tags
-  crel[tagTransformString] = (key) => key;
+  crel.tagTransform = (key) => key;
 
   // Export crel
-  exporter(crel, func);
-})((product, func) => {
+  exporter(crel);
+})((product) => {
   if (typeof exports === "object") {
     // Export for Browserify / CommonJS format
     module.exports = product;
-  } else if (typeof define === func && define.amd) {
+  } else if (typeof define === "function" && define.amd) {
     // Export for RequireJS / AMD format
     define(() => product);
   } else {
