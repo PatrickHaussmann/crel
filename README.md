@@ -19,3 +19,15 @@ A small, simple, and fast DOM creation utility
 # Improvements over the original
 
 - Proxy as default api
+- Custom tagTransform
+
+# Transform Tag
+
+If you want to transform tags to for example get dashes in them, you can define a `tagTransform` function:
+
+```javascript
+// Adds dashes on camelCase, ex: `camelCase` -> `camel-case`
+crel.tagTransform = (key) => key.replace(/([0-9a-z])([A-Z])/g, "$1-$2");
+let element = crel.myTag("Crello World!");
+console.log(element.tagName); // my-tag
+```

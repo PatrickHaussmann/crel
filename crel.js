@@ -14,6 +14,7 @@ This might make it harder to read at times, but the code's intention should be t
     const func = 'function',
         isNodeString = 'isNode',
         proxyString = 'proxy',
+        tagTransformString = 'tagTransform',
         doc = document,
         // Helper functions used throughout the script
         isType = (object, type) => typeof object === type,
@@ -66,7 +67,9 @@ This might make it harder to read at times, but the code's intention should be t
         get: (target, key) => {
             if (key in target) {
                 return target[key];
-            } else {
+            }
+            key = target[tagTransformString](key);
+            if (!(key in target[proxyString])) {
                 target[proxyString][key] = target.bind(null, key);
             }
             return target[proxyString][key];
@@ -84,6 +87,8 @@ This might make it harder to read at times, but the code's intention should be t
             return target[key] || crel[key];
         }
     });
+    // Transforms tags on call, to for example allow dashes in tags
+    crel[tagTransformString] = key => key;
     
     // Export crel
     exporter(crel, func);
