@@ -1,7 +1,8 @@
-![crel](logo.png)
+# Notice: this is a private fork
 
-[![NPM version][npm-image]][npm-url]
-[![Downloads][downloads-image]][downloads-url]
+The original project is [KoryNunn/crel](https://github.com/KoryNunn/crel)
+
+![crel](https://raw.githubusercontent.com/KoryNunn/crel/master/logo.png)
 
 # What
 
