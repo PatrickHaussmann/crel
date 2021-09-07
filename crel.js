@@ -75,13 +75,13 @@ This might make it harder to read at times, but the code's intention should be t
         // Binds specific tagnames to crel function calls with that tag as the first argument
         get: (target, key) => {
           if (key in target) {
+            // Crel internals like attrMap and cached
             return target[key];
           }
-          key = target.tagTransform(key);
-          if (!(key in target.proxy)) {
-            target.proxy[key] = target.bind(null, key);
-          }
-          return target.proxy[key];
+          // Transform key and cached
+          let transformedKey = target.tagTransform(key);
+          target[key] = target.bind(null, transformedKey);
+          return target[key];
         },
       }
     );
