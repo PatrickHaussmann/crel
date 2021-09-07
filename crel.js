@@ -106,18 +106,13 @@ This might make it harder to read at times, but the code's intention should be t
 
   crel.isElement = (object) => object instanceof Element;
   crel.isNode = (node) => node instanceof Node;
-  // Bound functions are "cached" here for legacy support and to keep Crels internal structure clean
-  crel.proxy = new Proxy(
-    (...args) => {
-      crel(...args);
+  // legacy support
+  crel.proxy = new Proxy(crel, {
+    get: (target, key) => {
+      if (key == "proxy") return;
+      return target[key];
     },
-    {
-      get: (target, key) => {
-        if (key == "proxy") return;
-        return target[key] || crel[key];
-      },
-    }
-  );
+  });
   // Transforms tags on call, to for example allow dashes in tags
   crel.tagTransform = (key) => key;
 
