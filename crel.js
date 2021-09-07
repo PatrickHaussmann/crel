@@ -12,13 +12,15 @@ This might make it harder to read at times, but the code's intention should be t
   // Define our function and its properties
   // Helper functions used throughout the script
   const isType = (object, type) => typeof object === type,
+    isElement = (object) => object instanceof Element,
+    isNode = (node) => node instanceof Node,
     // Recursively appends children to given element. As a text node if not already an element
     appendChild = (element, child) => {
       if (child) {
         if (Array.isArray(child)) {
           // Support (deeply) nested child elements
           child.map((subChild) => appendChild(element, subChild));
-        } else if (crel.isNode(child)) {
+        } else if (isNode(child)) {
           element.appendChild(child);
         } else if (isType(child, "string")) {
           child = document.createTextNode(child);
@@ -35,7 +37,7 @@ This might make it harder to read at times, but the code's intention should be t
     crel = new Proxy(
       (element, ...children) => {
         // If first argument is an element, use it as is, otherwise treat it as a tagname
-        if (!crel.isElement(element)) {
+        if (!isElement(element)) {
           if (!isType(element, "string") || element == "") {
             return; // Do nothing on invalid input
           }
@@ -104,15 +106,6 @@ This might make it harder to read at times, but the code's intention should be t
     },
   };
 
-  crel.isElement = (object) => object instanceof Element;
-  crel.isNode = (node) => node instanceof Node;
-  // legacy support
-  crel.proxy = new Proxy(crel, {
-    get: (target, key) => {
-      if (key == "proxy") return;
-      return target[key];
-    },
-  });
   // Transforms tags on call, to for example allow dashes in tags
   crel.tagTransform = (key) => key;
 

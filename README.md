@@ -3,6 +3,7 @@
 The original project is [KoryNunn/crel](https://github.com/KoryNunn/crel)
 
 Scripts written with the original should be compatible with this version!
+If you want to switch from the original to this fork read the [Migration Guide](#Migration-from-Legacy)
 
 ![crel](https://raw.githubusercontent.com/KoryNunn/crel/master/logo.png)
 
@@ -72,4 +73,14 @@ crel.div(
   }),
   crel.p()
 );
+```
+
+# Migration from Legacy
+
+The only thing you need to do is to insert these lines into your project. After that, the API will be fully backward compatible with the original project.
+
+```javascript
+crel.proxy = crel;
+crel.isElement = (object) => object instanceof Element;
+crel.isNode = (node) => node instanceof Node;
 ```
