@@ -76,10 +76,12 @@ crel.div(
 
 # Migration from Legacy
 
-The only thing you need to do is to insert these lines into your project. After that, the API will be fully backward compatible with the original project.
+Add the script [crel-legacy-fix.js](crel-legacy-fix.js) to your project.
 
-```javascript
-crel.proxy = crel;
-crel.isElement = (object) => object instanceof Element;
-crel.isNode = (node) => node instanceof Node;
+Or install with:
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/PatrickHaussmann/crel@master/crel.min.js,gh/PatrickHaussmann/crel@master/crel-legacy-fix.min.js"></script>
 ```
+
+After that, the API will be fully backward compatible with the original project.
