@@ -81,7 +81,7 @@ Add the script [crel-legacy-fix.js](crel-legacy-fix.js) to your project.
 Or install with:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/PatrickHaussmann/crel@master/crel.min.js,gh/PatrickHaussmann/crel@master/crel-legacy-fix.min.js"></script>
+<script src="https://cdn.jsdelivr.net/combine/gh/PatrickHaussmann/crel@master/crel.min.js,gh/PatrickHaussmann/crel@master/crel-legacy-fix.js"></script>
 ```
 
 After that, the API will be fully backward compatible with the original project.
