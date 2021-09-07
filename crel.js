@@ -24,7 +24,10 @@ This might make it harder to read at times, but the code's intention should be t
           child = document.createTextNode(child);
           element.appendChild(child);
         } else if (isType(child, "function")) {
-          child(element);
+          let return_el = child(element);
+          if (isNode(return_el)) {
+            element.appendChild(return_el);
+          }
         }
       }
     },
