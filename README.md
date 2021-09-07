@@ -2,8 +2,7 @@
 
 The original project is [KoryNunn/crel](https://github.com/KoryNunn/crel)
 
-Scripts written with the original should be compatible with this version!
-If you want to switch from the original to this fork read the [Migration Guide](#Migration-from-Legacy)
+If you want to switch from the original to this fork read the [Migration Guide](#migration-from-legacy)
 
 ![crel](https://raw.githubusercontent.com/KoryNunn/crel/master/logo.png)
 
