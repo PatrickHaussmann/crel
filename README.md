@@ -29,7 +29,7 @@ If you want to transform tags to for example get dashes in them, you can define 
 
 ```javascript
 // Adds dashes on camelCase, ex: `camelCase` -> `camel-case`
-crel.tagTransform = (key) => key.replace(/([0-9a-z])([A-Z])/g, "$1-$2");
+crel.tagTransform = (key) => key.replace(/([A-Z])/g, "-$1");
 let element = crel.myTag("Crello World!");
 console.log(element.tagName); // my-tag
 ```
