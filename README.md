@@ -22,6 +22,7 @@ A small, simple, and fast DOM creation utility
 - Custom tagTransform
 - Prepopulated attrMap with eventListener and style
 - Middleware functions
+- Select element by id
 
 # Transform Tag
 

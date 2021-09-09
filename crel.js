@@ -41,7 +41,12 @@ This might make it harder to read at times, but the code's intention should be t
           if (!isType(element, "string") || element == "") {
             return; // Do nothing on invalid input
           }
-          element = document.createElement(element);
+          if (element.startsWith("#")) {
+            element = document.getElementById(elementstr.slice(1));
+            if (!element) throw "No element with this id";
+          } else {
+            element = document.createElement(element);
+          }
         }
         // Define all used variables / shortcuts here, to make things smaller once compiled
         let settings = children[0],
