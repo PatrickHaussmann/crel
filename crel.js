@@ -30,7 +30,7 @@ This might make it harder to read at times, but the code's intention should be t
           if (isNode(return_el)) {
             element.appendChild(return_el);
           }
-        }
+        } else console.error("Unsupported type of child");
       }
     },
     // Define our function as a proxy interface
@@ -39,6 +39,7 @@ This might make it harder to read at times, but the code's intention should be t
         // If first argument is an element, use it as is, otherwise treat it as a tagname
         if (!isElement(element)) {
           if (!isType(element, "string") || element == "") {
+            console.error("invalid input");
             return; // Do nothing on invalid input
           }
           if (element.startsWith("#")) {
