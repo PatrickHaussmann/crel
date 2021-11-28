@@ -43,7 +43,7 @@ This might make it harder to read at times, but the code's intention should be t
             return; // Do nothing on invalid input
           }
           if (element.startsWith("#")) {
-            element = document.getElementById(elementstr.slice(1));
+            element = document.getElementById(element.slice(1));
             if (!element) throw "No element with this id";
           } else {
             element = document.createElement(element);
